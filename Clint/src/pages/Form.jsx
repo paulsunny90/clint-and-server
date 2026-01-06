@@ -9,6 +9,7 @@ const Form = () => {
     });
 
     const [Student,setStudent]=useState([]);
+    const [Edit,setEdit]=useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,24 +23,62 @@ const Form = () => {
     }
 
     const register = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        try {
-            const res = await fetch("http://localhost:5000/api/student", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
+    try {
+        const url = Edit
+            ? `http://localhost:5000/api/student/${Edit}`
+            : "http://localhost:5000/api/student";
 
-            if (!res.ok) throw new Error("Failed to submit");
+        const method = Edit ? "PUT" : "POST";
 
-            alert("Student registered successfully!");
-            setFormData({ name: "", email: "", rollno: "" });
-        } catch (error) {
-            alert("An error occurred: " + error.message);
-        }
+        const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+        });
+
+        if (!res.ok) throw new Error("Failed");
+
+        alert(Edit ? "Student updated!" : "Student registered!");
+
+        setFormData({ name: "", email: "", rollno: "" });
+        setEdit(null);
         getStudent();
+    } catch (error) {
+        alert(error.message);
+    }
+};
+
+    
+    const deleteStudent =async(id)=>{
+        if (!window.confirm("Are you sure you want to delete?")) return;
+
+        try{
+            const res= await fetch(`http://localhost:5000/api/student/${id}`,{
+                 method:"DELETE",
+                 headers:{"Content-Type": "application/json" },
+
+            })
+            getStudent();
+
+        }catch(error){
+            alert("delete failed");
+        }
     };
+    
+    const editStudent=(students)=>{
+        setFormData({name: students.name, 
+            email: students.email,
+            rollno: students.rollno
+         });
+         setEdit(students._id);
+    }
+    
+
+    
+
+
     useEffect(()=>{
           getStudent();
     },[]);
@@ -89,6 +128,10 @@ const Form = () => {
                         <td>{s.name}</td>
                         <td>{s.email}</td>
                         <td>{s.rollno}</td>
+                        <td>
+                            <button onClick={() => editStudent(s)}>Edit</button>{" "}
+                            <button onClick={() => deleteStudent(s._id)}>Delete</button>
+                        </td>
                     </tr>
                     ))}
                 </tbody>
@@ -97,4 +140,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default Form; 
