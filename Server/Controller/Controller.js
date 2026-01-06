@@ -8,3 +8,13 @@ export const cratStudent = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getUser =async (req,res)=>{
+    try{
+        const get =await Student.find(req.body);
+        res.status(201).json(get);
+    }catch(error){
+        res.status(500).json({error:error.message})
+
+    }
+}
