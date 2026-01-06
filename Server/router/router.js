@@ -2,14 +2,19 @@ import express from "express"
 
 import {
     cratStudent,
-    getUser
+    getUser,
+    Putdata,
+    Deletedata
+
 }from"../Controller/Controller.js"
-import { get } from "mongoose";
+
 
 const router= express.Router();
 
 router.post('/',cratStudent);
 router.get('/',getUser)
+router.put('/:id',Putdata)
+router.delete('/:id',Deletedata)
 
 export default router
 
