@@ -1,6 +1,7 @@
 import express from "express";
-import connectDB from "./Dbconfig/db.js";
-import router from "./router/router.js";
+import connectDB from "./Config/db.js";
+import router from "./router/student.router.js";
+import Adminrouts from "./router/Aamin.router.js";
 import cors from 'cors'
 const app = express();
 app.use(cors({
@@ -8,7 +9,11 @@ app.use(cors({
 
 }));
 app.use(express.json());
+
 app.use("/api/student/",router);
+
+app.use("/api/admin/",Adminrouts);
+
 
 connectDB(); 
 

@@ -6,7 +6,7 @@ import {
     Putdata,
     Deletedata
 
-}from"../Controller/Controller.js"
+}from"../Controller/Student.Controller.js"
 
 
 const router= express.Router();
@@ -17,5 +17,3 @@ router.put('/:id',Putdata)
 router.delete('/:id',Deletedata)
 
 export default router
-
-
